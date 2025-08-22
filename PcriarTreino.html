@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Move Fit - Criar Treino</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="Imagens/LogoMovefit-icone.ico" type="image/x-icon">
+</head>
+<body>
+  <header class="topo">
+    <a href="index.html"><img src="Imagens/LogoMovefit.png" alt="Move Fit Logo" class="logo-img"></a>
+    <div class="menu-toggle" id="mobile-menu"><span class="bar"></span><span class="bar"></span><span class="bar"></span></div>
+    <nav>
+      <a href="index.html">Início</a>
+      <a href="PcriarTreino.html" class="active">Treinos</a>
+      <a href="Pplano.html">Plano</a>
+      <a href="#">Receitas</a>
+      <a href="#">Dicas</a>
+    </nav>
+  </header>
+
+  <script>
+    const menuToggle = document.getElementById('mobile-menu');
+    const nav = document.querySelector('header nav');
+    menuToggle.addEventListener('click', () => {
+      nav.classList.toggle('active');
+      menuToggle.classList.toggle('active');
+    });
+  </script>
+
+  <section class="hero">
+    <div class="overlay"></div>
+    <div class="calculadora-container">
+      <h2>Criar Treino Personalizado</h2>
+
+      <label for="nome">Nome:</label>
+      <input type="text" id="nome" placeholder="Digite seu nome">
+
+      <label for="peso">Peso (kg):</label>
+      <input type="number" id="peso" placeholder="Ex: 70">
+
+      <label for="altura">Altura (cm):</label>
+      <input type="number" id="altura" placeholder="Ex: 175">
+
+      <label for="idade">Idade:</label>
+      <input type="number" id="idade" placeholder="Ex: 25">
+
+      <label for="sexo">Sexo:</label>
+      <select id="sexo">
+        <option value="masculino">Masculino</option>
+        <option value="feminino">Feminino</option>
+      </select>
+
+      <label>Objetivo:</label>
+      <div class="objetivos-container">
+        <button type="button" class="objetivo-btn" data-valor="emagrecer">Emagrecer</button>
+        <button type="button" class="objetivo-btn" data-valor="hipertrofia">Hipertrofia</button>
+        <button type="button" class="objetivo-btn" data-valor="resistencia">Resistência</button>
+        <button type="button" class="objetivo-btn" data-valor="saude">Saúde Geral</button>
+      </div>
+      <p id="objetivos-selecionados" style="text-align:center; font-weight:bold; margin-bottom:15px; color:#f40612;"></p>
+
+      <label for="atividade">Nível de Atividade:</label>
+      <select id="atividade">
+        <option value="sedentario">Sedentário</option>
+        <option value="leve">Leve</option>
+        <option value="moderado">Moderado</option>
+        <option value="intenso">Intenso</option>
+      </select>
+
+      <label for="diasTreino">Dias por semana:</label>
+      <select id="diasTreino">
+        <option value="3">3 dias</option>
+        <option value="4">4 dias</option>
+        <option value="5">5 dias</option>
+        <option value="6">6 dias</option>
+      </select>
+
+      <label for="limitacao">Alguma limitação física?</label>
+      <input type="text" id="limitacao" placeholder="Ex: Lesão no ombro ou joelho">
+
+      <button onclick="criarTreino()">Gerar Treino</button>
+    </div>
+  </section>
+
+  <div id="treino-resultado" class="treino-container"></div>
+
+  <script src="Calculadora.js"></script>
+</body>
+</html>

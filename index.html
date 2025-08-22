@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <!-- Favicon da aba -->
+  <link rel="icon" href="Imagens/LogoMovefit-icone.ico" type="image/x-icon">
+
+  <!-- Meta tags básicas -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Título -->
+  <title>Move Fit</title>
+
+  <!-- CSS geral -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Cabeçalho -->
+  <header class="topo">
+    <!-- Logo -->
+    <a href="index.html">
+      <img src="Imagens/LogoMovefit.png" alt="Move Fit Logo" class="logo-img">
+    </a>
+
+    <!-- Ícone do menu hamburger (apenas mobile) -->
+    <div class="menu-toggle" id="mobile-menu">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </div>
+
+    <!-- Navegação -->
+    <nav class="nav">
+      <a href="index.html">Início</a>
+      <a href="PcriarTreino.html">Treinos</a>
+      <a href="#">Receitas</a>
+      <a href="#">Dicas</a>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="overlay"></div>
+    <div class="conteudo">
+      <h2>Transforme-se, inspire-se!</h2>
+      <p>Dicas de dieta, treinos e motivação para mudar sua vida.</p>
+      <a href="Pplano.html"><button>Começar Agora</button></a>
+    </div>
+  </section>
+
+<!-- Mini Game Section -->
+<section class="minigame-section">
+  <h2>Mini Game Move Fit 🍔</h2>
+  <p>Use as teclas W,A,S,D para coletar os hambúrgueres sem ser pego pelos monstros!</p>
+  <button id="startGame" class="play-button">Play</button>
+  <div id="score" class="score">Pontuação: 0</div>
+  <canvas id="gameCanvas" width="900" height="650"></canvas>
+</section>
+
+<style>
+.minigame-section {
+  max-width: 950px;
+  margin: 50px auto;
+  padding: 30px;
+  background: rgba(0,0,0,0.6);
+  border-radius: 15px;
+  text-align: center;
+  color: white;
+}
+
+.minigame-section h2 { color: #e50914; margin-bottom: 10px; }
+.score { margin: 10px 0; font-size: 18px; }
+.play-button {
+  padding: 12px 25px;
+  background: #e50914;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+.play-button:hover { background: #f40612; }
+
+canvas {
+  background: rgba(0,0,0,0.5);
+  border-radius: 10px;
+  display:block;
+  margin:0 auto;
+  border: 5px solid #e50914;
+}
+</style>
+
+<script>
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+
+// Imagens
+const pacmanImg = new Image(); pacmanImg.src = 'Imagens/rostojuninho.png';
+const hamburgerImg = new Image(); hamburgerImg.src = 'Imagens/hamburguer.png';
+const monsterImg = new Image(); monsterImg.src = 'Imagens/MONSTRO.png';
+
+// Pacman
+let pacman = { x: 50, y: 50, width: 50, height: 50, speed: 5, dx:0, dy:0 };
+
+// Hambúrgueres
+let hamburgers = [];
+const hamburgerCount = 12;
+
+// Monstros
+let monsters = [];
+let monsterSpeed = 1.5;
+let monsterIncreaseScore = 6;
+
+// Pontuação
+let score = 0;
+let gameStarted = false;
+
+// Paredes
+let walls = [];
+
+// Carregar imagens
+let imagesLoaded = 0;
+[pacmanImg,hamburgerImg,monsterImg].forEach(img => img.onload = ()=>{
+  imagesLoaded++;
+  if(imagesLoaded===3) document.getElementById('startGame').disabled=false;
+});
+
+// Colisão retângulos
+function collideRect(a,b){
+  return a.x < b.x+b.width && a.x+a.width > b.x && a.y < b.y+b.height && a.y+a.height > b.y;
+}
+
+// Gerar hambúrgueres
+function gerarHamburgers(){
+  hamburgers = [];
+  for(let i=0;i<hamburgerCount;i++){
+    let h={x:Math.random()*(canvas.width-40),y:Math.random()*(canvas.height-40),width:30,height:30};
+    while(walls.some(w=>collideRect(h,w))) {h.x=Math.random()*(canvas.width-40); h.y=Math.random()*(canvas.height-40);}
+    hamburgers.push(h);
+  }
+}
+
+// Gerar monstros
+function gerarMonsters(count){
+  monsters=[];
+  for(let i=0;i<count;i++){
+    let posX = canvas.width-50-Math.random()*200;
+    let posY = canvas.height-50-Math.random()*200;
+    monsters.push({x:posX,y:posY,width:50,height:50,speed:monsterSpeed,dirX:0,dirY:0});
+  }
+}
+
+// Gerar paredes estilo Pacman, corredores maiores
+function gerarWalls(){
+  walls=[];
+  let gridSize = 70; // aumentado para corredores maiores
+  let rows = Math.floor(canvas.height/gridSize);
+  let cols = Math.floor(canvas.width/gridSize);
+
+  for(let i=0;i<rows;i++){
+    for(let j=0;j<cols;j++){
+      if(Math.random()<0.2 && !(i<2 && j<2) && !(i===0 || j===0 || i===rows-1 || j===cols-1)){
+        walls.push({x:j*gridSize,y:i*gridSize,width:gridSize,height:gridSize});
+      }
+    }
+  }
+}
+
+// Teclas W,A,S,D
+window.addEventListener('keydown',(e)=>{
+  switch(e.key.toLowerCase()){
+    case "w": pacman.dx=0; pacman.dy=-pacman.speed; break;
+    case "s": pacman.dx=0; pacman.dy=pacman.speed; break;
+    case "a": pacman.dx=-pacman.speed; pacman.dy=0; break;
+    case "d": pacman.dx=pacman.speed; pacman.dy=0; break;
+  }
+});
+
+// Start Game
+document.getElementById('startGame').addEventListener('click',()=>{
+  score=0; monsterSpeed=2;
+  pacman = { x: 50, y: 50, width: 50, height: 50, speed: 5, dx:0, dy:0 };
+  gerarWalls();
+  gerarHamburgers();
+  gerarMonsters(3);
+  gameStarted=true;
+  document.getElementById('score').innerText="Pontuação: "+score;
+  gameLoop();
+});
+
+// Update
+function update(){
+  // Movimento pacman
+  let nextX=pacman.x+pacman.dx;
+  let nextY=pacman.y+pacman.dy;
+  let pacmanNext={...pacman,x:nextX,y:nextY};
+  if(nextX<0) pacmanNext.x=0;
+  if(nextX+pacman.width>canvas.width) pacmanNext.x=canvas.width-pacman.width;
+  if(nextY<0) pacmanNext.y=0;
+  if(nextY+pacman.height>canvas.height) pacmanNext.y=canvas.height-pacman.height;
+  if(!walls.some(w=>collideRect(pacmanNext,w))) {pacman.x=pacmanNext.x; pacman.y=pacmanNext.y;}
+
+  // Coletar hambúrgueres
+  for(let i=hamburgers.length-1;i>=0;i--){
+    if(collideRect(pacman,hamburgers[i])){
+      hamburgers.splice(i,1); score++;
+      document.getElementById('score').innerText="Pontuação: "+score;
+      if(score%monsterIncreaseScore===0) {
+        let posX = canvas.width-50-Math.random()*200;
+        let posY = canvas.height-50-Math.random()*200;
+        monsters.push({x:posX,y:posY,width:50,height:50,speed:monsterSpeed,dirX:0,dirY:0});
+      }
+      if(hamburgers.length===0) gerarHamburgers();
+    }
+  }
+
+  // Monstros
+  monsters.forEach(m=>{
+    // Distância para perseguir Pacman
+    let dx = pacman.x - m.x;
+    let dy = pacman.y - m.y;
+    let distance = Math.hypot(dx,dy);
+    if(distance<200){ // perto, perseguir
+      m.dirX = dx>0?m.speed:(dx<0?-m.speed:0);
+      m.dirY = dy>0?m.speed:(dy<0?-m.speed:0);
+    } else { // aleatório
+      if(Math.random()<0.02){
+        m.dirX = (Math.random()*2-1)*m.speed;
+        m.dirY = (Math.random()*2-1)*m.speed;
+      }
+    }
+
+    // Movimento e colisão com borda
+    let nextMX = m.x+m.dirX;
+    let nextMY = m.y+m.dirY;
+    let monsterNext={...m,x:nextMX,y:nextMY};
+    if(nextMX<0) monsterNext.x=0;
+    if(nextMX+m.width>canvas.width) monsterNext.x=canvas.width-m.width;
+    if(nextMY<0) monsterNext.y=0;
+    if(nextMY+m.height>canvas.height) monsterNext.y=canvas.height-m.height;
+    if(!walls.some(w=>collideRect(monsterNext,w))){ m.x=monsterNext.x; m.y=monsterNext.y; }
+
+    // Colisão com pacman
+    if(collideRect(pacman,m)){
+      alert("Você foi pego! Pontuação final: "+score);
+      gameStarted=false;
+    }
+  });
+}
+
+// Draw
+function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  // Paredes
+  ctx.fillStyle="#e50914";
+  walls.forEach(w=>ctx.fillRect(w.x,w.y,w.width,w.height));
+  // Pacman
+  ctx.drawImage(pacmanImg,pacman.x,pacman.y,pacman.width,pacman.height);
+  // Hambúrgueres
+  hamburgers.forEach(h=>ctx.drawImage(hamburgerImg,h.x,h.y,h.width,h.height));
+  // Monstros
+  monsters.forEach(m=>ctx.drawImage(monsterImg,m.x,m.y,m.width,m.height));
+}
+
+// Game Loop
+function gameLoop(){
+  if(gameStarted){update(); draw(); requestAnimationFrame(gameLoop);}
+}
+</script>
+
+  <!-- Script do menu mobile -->
+  <script>
+    const menuToggle = document.getElementById('mobile-menu');
+    const nav = document.querySelector('header nav');
+    menuToggle.addEventListener('click', () => {
+      nav.classList.toggle('active');
+      menuToggle.classList.toggle('active');
+    });
+  </script>
+
+  <!-- JS geral -->
+  <script src="Calculadora.js"></script>
+</body>
+</html>

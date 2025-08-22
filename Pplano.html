@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <!-- Define codificação de caracteres -->
+  <meta charset="UTF-8">
+  <!-- Torna o site responsivo em diferentes dispositivos -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Título da aba -->
+  <title>Move Fit - Calculadora</title>
+  <!-- Link para o CSS principal -->
+  <link rel="stylesheet" href="style.css">
+  <!-- Favicon da aba -->
+  <link rel="icon" href="Imagens/LogoMovefit-icone.ico" type="image/x-icon">
+</head>
+<body>
+  <!-- Cabeçalho da calculadora -->
+  <header class="topo">
+    <a href="index.html">
+      <img src="Imagens/LogoMovefit.png" alt="Move Fit Logo" class="logo-img">
+    </a>
+    <!-- Ícone do menu hamburger (apenas mobile) -->
+    <div class="menu-toggle" id="mobile-menu">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </div>
+    <!-- Navegação -->
+    <nav>
+      <a href="index.html">Início</a>
+      <a href="PcriarTreino.html">Treinos</a>
+      <a href="#">Receitas</a>
+      <a href="#">Dicas</a>
+    </nav>
+  </header>
+
+  <!-- Script do menu mobile -->
+  <script>
+    const menuToggle = document.getElementById('mobile-menu');
+    const nav = document.querySelector('header nav');
+    menuToggle.addEventListener('click', () => {
+      nav.classList.toggle('active');
+      menuToggle.classList.toggle('active');
+    });
+  </script>
+
+  <!-- Seção central da calculadora -->
+  <section class="hero">
+    <!-- Camada escura de fundo -->
+    <div class="overlay"></div>
+
+    <!-- Container da calculadora -->
+    <div class="calculadora-container">
+      <h2>Calculadora de IMC e Calorias</h2>
+
+      <!-- Campos de entrada de dados -->
+      <label for="peso">Peso (kg):</label>
+      <input type="number" id="peso" placeholder="Ex: 70">
+
+      <label for="altura">Altura (cm):</label>
+      <input type="number" id="altura" placeholder="Ex: 175">
+
+      <label for="idade">Idade:</label>
+      <input type="number" id="idade" placeholder="Ex: 25">
+
+      <label for="sexo">Sexo:</label>
+      <select id="sexo">
+        <option value="masculino">Masculino</option>
+        <option value="feminino">Feminino</option>
+      </select>
+
+      <!-- Legenda explicativa do nível de atividade -->
+      <div class="atividade-legenda">
+        <h3>Escolha seu Nível de Atividade:</h3>
+        <ul>
+          <li class="atividade-sedentario">⚪ Sedentário: Pouca ou nenhuma atividade física diária.</li>
+          <li class="atividade-leve">🟠 Leve: Atividades leves 1-3x por semana.</li>
+          <li class="atividade-moderado">🟡 Moderado: Exercícios 3-5x por semana.</li>
+          <li class="atividade-intenso">🟢 Intenso: Exercícios diários ou esportes competitivos.</li>
+        </ul>
+      </div>
+
+      <label for="atividade">Nível de Atividade:</label>
+      <select id="atividade">
+        <option value="sedentario">Sedentário</option>
+        <option value="leve">Leve</option>
+        <option value="moderado">Moderado</option>
+        <option value="intenso">Intenso</option>
+      </select>
+
+      <!-- Botão para calcular IMC e calorias -->
+      <button onclick="calcular()">Calcular</button>
+
+      <!-- Espaços onde o resultado será exibido -->
+      <div class="resultado" id="resultado"></div>
+      <div class="calorias-info" id="calorias-info"></div>
+    </div>
+  </section>
+
+  <!-- Seção para dicas personalizadas -->
+  <section class="dicas-container" id="dicas">
+    <h2>Dicas Personalizadas para Você</h2>
+    <div class="explicativo" id="explicativo"></div>
+    <ul id="dicas-list"></ul>
+  </section>
+
+  <!-- Chamando o JavaScript da calculadora -->
+  <script src="Calculadora.js"></script>
+</body>
+</html>

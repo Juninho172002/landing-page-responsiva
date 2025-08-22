@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mini Game Pac-Man</title>
+<style>
+  body {
+    margin: 0;
+    background: linear-gradient(135deg, #f06, #f79); /* plano de fundo geométrico */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  canvas {
+    background: #111;
+    border: 3px solid #fff;
+    border-radius: 15px;
+  }
+  #score {
+    color: white;
+    font-size: 20px;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-family: Arial, sans-serif;
+  }
+</style>
+</head>
+<body>
+<div id="score">Pontuação: 0</div>
+<canvas id="gameCanvas" width="600" height="400"></canvas>
+<script>
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+
+const pacmanImg = new Image();
+pacmanImg.src = 'Imagens/rostojuninho.png'; // caminho relativo da sua foto
+
+const hamburgerImg = new Image();
+hamburgerImg.src = 'Imagens/hamburguer.png'; // caminho relativo do hambúrguer
+
+const pacman = { x: 50, y: 50, width: 40, height: 40, speed: 5 };
+const hamburgers = [];
+const hamburgerCount = 10;
+let score = 0;
+
+// Gerar hamburgers aleatoriamente
+for(let i = 0; i < hamburgerCount; i++) {
+  hamburgers.push({
+    x: Math.random() * (canvas.width - 30),
+    y: Math.random() * (canvas.height - 30),
+    width: 30,
+    height: 30
+  });
+}
+
+// Controle do teclado
+const keys = {};
+window.addEventListener('keydown', (e) => keys[e.key] = true);
+window.addEventListener('keyup', (e) => keys[e.key] = false);
+
+function update() {
+  if(keys['ArrowUp'] && pacman.y > 0) pacman.y -= pacman.speed;
+  if(keys['ArrowDown'] && pacman.y < canvas.height - pacman.height) pacman.y += pacman.speed;
+  if(keys['ArrowLeft'] && pacman.x > 0) pacman.x -= pacman.speed;
+  if(keys['ArrowRight'] && pacman.x < canvas.width - pacman.width) pacman.x += pacman.speed;
+
+  // Colisão com hamburgers
+  for(let i = hamburgers.length - 1; i >= 0; i--) {
+    const h = hamburgers[i];
+    if(pacman.x < h.x + h.width &&
+       pacman.x + pacman.width > h.x &&
+       pacman.y < h.y + h.height &&
+       pacman.y + pacman.height > h.y) {
+         hamburgers.splice(i, 1);
+         score++;
+         document.getElementById('score').innerText = "Pontuação: " + score;
+    }
+  }
+}
+
+function draw() {
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  // Desenhar Pac-Man
+  ctx.drawImage(pacmanImg, pacman.x, pacman.y, pacman.width, pacman.height);
+
+  // Desenhar hamburgers
+  hamburgers.forEach(h => {
+    ctx.drawImage(hamburgerImg, h.x, h.y, h.width, h.height);
+  });
+}
+
+function gameLoop() {
+  update();
+  draw();
+  requestAnimationFrame(gameLoop);
+}
+
+// Começar o jogo quando imagens carregarem
+pacmanImg.onload = () => {
+  hamburgerImg.onload = () => {
+    gameLoop();
+  }
+};
+</script>
+</body>
+</html>

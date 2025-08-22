@@ -1,0 +1,448 @@
+/* Reset básico para tirar margens e paddings padrões */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; /* Inclui padding e border na largura do elemento */
+}
+
+/* Estilo do corpo da página */
+body {
+  font-family: Arial, sans-serif;
+  background: black; /* Cor de fundo */
+  color: white; /* Cor padrão do texto */
+}
+
+/* --- Cabeçalho --- */
+.topo {
+  display: flex; /* Flexbox para alinhar itens horizontalmente */
+  justify-content: space-between; /* Espaço entre logo e nav */
+  align-items: center; /* Alinha verticalmente ao centro */
+  padding: 15px 50px; /* Espaçamento interno */
+  background: rgba(0,0,0,0.7); /* Fundo semi-transparente */
+  position: fixed; /* Fixa no topo */
+  width: 100%; /* Ocupa toda a largura */
+  z-index: 10; /* Fica acima de outros elementos */
+}
+
+/* Logo */
+.logo-img {
+  height: 70px; /* Altura da logo */
+  width: auto; /* Largura proporcional */
+  object-fit: contain;
+  margin-left: 50px; /* Distância da borda esquerda */
+}
+
+/* Navegação */
+nav a {
+  color: white;
+  margin: 0 15px; /* Espaço entre links */
+  text-decoration: none;
+  font-weight: bold;
+}
+
+nav a:hover {
+  color: #e50914; /* Cor ao passar o mouse */
+}
+
+/* --- Hero Section --- */
+.hero {
+  min-height: 100vh; /* Ocupa toda altura da tela */
+  background: url('Imagens/ImagemPInicial.png') no-repeat center center/cover; /* Imagem de fundo */
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 20px; /* Espaçamento lateral */
+}
+
+/* Camada escura sobre a imagem */
+.hero .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+}
+
+/* Conteúdo sobre a imagem */
+.conteudo {
+  position: relative;
+  z-index: 2; /* Fica acima da overlay */
+  max-width: 700px;
+  width: 100%;
+}
+
+.conteudo h2 {
+  font-size: 40px;
+  margin-bottom: 20px;
+}
+
+.conteudo p {
+  font-size: 20px;
+  margin-bottom: 30px;
+}
+
+.conteudo button {
+  padding: 15px 30px;
+  background: #e50914;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.conteudo button:hover {
+  background: #f40612;
+}
+
+/* --- Calculadora --- */
+.calculadora-container {
+  position: relative;
+  z-index: 2;
+  max-width: 600px; /* Limita largura */
+  width: 100%;
+  padding: 30px;
+  background: rgba(255, 255, 255, 0.05); /* Transparência */
+  border-radius: 15px;
+  backdrop-filter: blur(10px); /* Efeito blur de fundo */
+  text-align: center;
+  color: white;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
+  margin: 150px auto 50px auto; /* Centraliza horizontalmente */
+}
+
+.calculadora-container h2 {
+  font-size: 32px;
+  margin-bottom: 20px;
+  color: #e50914;
+}
+
+.calculadora-container label {
+  display: block; /* Cada label em linha separada */
+  margin: 15px 0 5px;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.calculadora-container input,
+.calculadora-container select {
+  width: 80%; /* Largura dos inputs */
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.calculadora-container button {
+  padding: 12px 25px;
+  background: #e50914;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 18px;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: 0.3s;
+}
+
+.calculadora-container button:hover {
+  background: #f40612;
+}
+
+/* Resultado e informações */
+.resultado {
+  margin-top: 25px;
+  font-size: 20px;
+}
+
+.calorias-info {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 18px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  border-radius: 15px;
+  backdrop-filter: blur(5px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
+  transition: 0.3s;
+}
+
+.calorias-info strong {
+  color: #e50914;
+}
+
+.calorias-info button {
+  padding: 10px 20px;
+  margin: 10px 10px 0 10px;
+  background: #e50914;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.calorias-info button:hover {
+  background: #f40612;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* --- Dicas --- */
+.dicas-container {
+  display: none; /* Inicialmente escondido */
+  padding: 50px 20px;
+  background: rgba(0, 0, 0, 0.85);
+  color: white;
+  text-align: left;
+}
+
+.dicas-container h2 {
+  color: #e50914;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.dicas-container ul {
+  list-style: none;
+  padding: 0;
+  font-size: 18px;
+  line-height: 1.8;
+}
+
+.dicas-container li {
+  background: rgba(255, 255, 255, 0.05);
+  margin-bottom: 15px;
+  padding: 15px 20px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  transition: 0.3s;
+}
+
+.dicas-container li:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.dicas-icon {
+  font-size: 24px;
+  color: #e50914;
+  min-width: 30px;
+  text-align: center;
+}
+
+/* Explicativo */
+.explicativo {
+  margin: 20px 0;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  backdrop-filter: blur(8px);
+  font-size: 18px;
+  text-align: center;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
+}
+
+.explicativo strong {
+  color: #e50914;
+}
+
+/* Atividade legenda */
+.atividade-legenda {
+  margin: 20px 0;
+  padding: 15px 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  backdrop-filter: blur(5px);
+  font-size: 16px;
+  text-align: left;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.atividade-legenda h3 {
+  color: #e50914;
+  margin-bottom: 10px;
+}
+
+.atividade-legenda ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.atividade-legenda li {
+  margin-bottom: 8px;
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+/* Cores por nível de atividade */
+.atividade-sedentario {
+  background: rgba(255, 0, 0, 0.2);
+  color: #ff4d4d;
+}
+
+.atividade-leve {
+  background: rgba(255, 165, 0, 0.2);
+  color: #ffa500;
+}
+
+.atividade-moderado {
+  background: rgba(255, 255, 0, 0.2);
+  color: #ffff66;
+}
+
+.atividade-intenso {
+  background: rgba(0, 255, 0, 0.2);
+  color: #66ff66;
+}
+
+/* --- Responsivo --- */
+@media (max-width: 768px) {
+  .logo-img {
+    height: 50px;
+    margin-left: 20px;
+  }
+
+  .calculadora-container input,
+  .calculadora-container select {
+    width: 95%;
+  }
+
+  .conteudo h2 {
+    font-size: 30px;
+  }
+
+  .conteudo p {
+    font-size: 16px;
+  }
+
+  .conteudo button {
+    font-size: 16px;
+    padding: 12px 25px;
+  }
+}
+
+/* Menu hamburger - apenas visível em telas pequenas */
+.menu-toggle {
+  display: none; /* Esconde no desktop */
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.menu-toggle .bar {
+  height: 3px;
+  width: 25px;
+  background-color: white;
+  margin: 4px 0;
+  transition: 0.3s;
+}
+
+/* Estilo do menu mobile quando aberto */
+nav.active {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: rgba(0,0,0,0.9);
+  width: 200px;
+  padding: 10px;
+  border-radius: 0 0 10px 10px;
+}
+
+nav.active a {
+  margin: 10px 0;
+}
+
+/* Transformação do ícone quando ativo */
+.menu-toggle.active .bar:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.menu-toggle.active .bar:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-toggle.active .bar:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  nav {
+    display: none; /* Esconde nav normal no mobile */
+    flex-direction: column;
+  }
+
+  .menu-toggle {
+    display: flex; /* Mostra hamburger no mobile */
+  }
+}
+
+/* Objetivos modernos */
+.objetivos-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.objetivo-btn {
+  background: rgba(229, 9, 20, 0.8);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.objetivo-btn.active,
+.objetivo-btn:hover {
+  background: #f40612;
+  transform: scale(1.05);
+}
+
+/* Tabela treino */
+.treino-container {
+  max-width: 1100px;
+  margin: 50px auto;
+  padding: 20px;
+  color: white;
+  background: linear-gradient(135deg, #1e1e1e 25%, #2c2c2c 25%, #2c2c2c 50%, #1e1e1e 50%, #1e1e1e 75%, #2c2c2c 75%, #2c2c2c 100%);
+  background-size: 56.57px 56.57px;
+  border-radius: 15px;
+}
+
+.treino-tabela {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 15px 0;
+}
+
+.treino-tabela th, .treino-tabela td {
+  border: 1px solid rgba(255,255,255,0.3);
+  padding: 12px;
+  text-align: center;
+}
+
+.treino-tabela th {
+  background: rgba(229,9,20,0.8);
+}
+
+.treino-tabela tr:nth-child(even) {
+  background: rgba(255,255,255,0.1);
+}
+
+.treino-tabela tr:hover {
+  background: rgba(229,9,20,0.3);
+}
